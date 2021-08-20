@@ -1,13 +1,33 @@
 const { Schema, model } = require('mongoose')
 
 const UserSchema = new Schema({
-    username: {},
-    email: {},
-    thoughts: [{}],
-    friend: [{}]
+    username: {
+        type: String,
+        unique: true,
+        required: 'Username is Required',
+        trim: true
 
-})
-// Create a virtual called friendCount that retrieves the length of the user's friends array field on query.
+    },
+    email: {
+        type: String,
+        required: 'Email is Required',
+        unique: true,
+        match: [/.+@.+\..+/, 'Please enter a valid e-mail address']
+    },
+    thoughts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Thought'
+    }],
+    friend: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }]
+
+});
+
+UserSchema.virtual('friendCount').get(function() {
+    return this.friends.length;
+});
 
 const User = model('User', UserSchema);
 
