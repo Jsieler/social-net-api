@@ -15,6 +15,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/social-net-api'
   useUnifiedTopology: true
 });
 
+mongoose.set('useCreateIndex', true);
 mongoose.set('debug', true);
 
 
