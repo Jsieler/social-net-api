@@ -109,21 +109,26 @@ const UserController = {
   // DELETE to remove a friend from a user's friend list
   deleteFriend({ params }, res) {
     User.findOneAndUpdate(
-      { _id: params.userId },
-      { $pull: { friends: params.friendId } },
+      { _id: params.id },
+      { $pull: { friends: params.friendId }},
       { new: true, runValidators: true }
-    )
-    .then((dbUser) => {
+  )
+  .populate({
+      path: 'friends',
+      select: ('-__v')
+  })
+  .select('-__v')
+  .then(dbUser => {
       if (!dbUser) {
-        res.status(404).json({ message: "No User found with this Id" });
-        return
-      }
-      res.json(dbUser);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-  },
+          res.status(404).json({ message: 'No User found with this Id' });
+          return
+    }
+    res.json(dbUser);
+  })
+  .catch((err) => {
+    res.json(err);
+  });
+},
 
 
 
