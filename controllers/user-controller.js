@@ -85,19 +85,14 @@ const UserController = {
   // Add a Friend
   addFriend({ params }, res) {
     User.findOneAndUpdate(
-      { _id: params.userId },
-      { $push: { friends: params.friendId } },
-      { new: true, runValidators: true }
+        { _id: params.userId },
+        { $push: { friends: params.friendId }},
+        { new: true, runValidators: true }
     )
-    .populate({
-      path: 'friends',
-      select: ('-__v')
-    })
-    .selet('-__v')
-    .then((dbUser) => {
-      if (!dbUser) {
-        res.status(404).json({ message: "No User found with this Id" });
-        return
+    .then(dbUser => {
+        if (!dbUser) {
+            res.status(404).json({ message: 'No User found with this id!' });
+            return;
       }
       res.json(dbUser);
     })
@@ -113,11 +108,6 @@ const UserController = {
       { $pull: { friends: params.friendId } },
       { new: true, runValidators: true }
     )
-    .populate({
-      path: 'friends',
-      select: ('-__v')
-    })
-    .selet('-__v')
     .then((dbUser) => {
       if (!dbUser) {
         res.status(404).json({ message: "No User found with this Id" });
@@ -135,11 +125,5 @@ const UserController = {
 }
 
 
-
-
-  
-
-
-  
 
 module.exports = UserController;
